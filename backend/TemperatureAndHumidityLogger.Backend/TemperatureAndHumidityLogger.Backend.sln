@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperatureAndHumidityLogger.Core", "TemperatureAndHumidityLogger.Core\TemperatureAndHumidityLogger.Core.csproj", "{82E7F6F0-E8F0-4972-9E48-2D2BE7AE8F44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperatureAndHumidityLogger.Application", "TemperatureAndHumidityLogger.Application\TemperatureAndHumidityLogger.Application.csproj", "{4ED376FB-73A5-4E0E-A358-C8F1E20BBDB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperatureAndHumidityLogger.Infrastructure", "TemperatureAndHumidityLogger.Infrastructure\TemperatureAndHumidityLogger.Infrastructure.csproj", "{015F42F2-37F6-4520-8D3D-4E9D0E51584D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemperatureAndHumidityLogger.WebApi", "TemperatureAndHumidityLogger.WebApi\TemperatureAndHumidityLogger.WebApi.csproj", "{5C67D894-4F18-44EC-80A6-12386AF395D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82E7F6F0-E8F0-4972-9E48-2D2BE7AE8F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E7F6F0-E8F0-4972-9E48-2D2BE7AE8F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E7F6F0-E8F0-4972-9E48-2D2BE7AE8F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E7F6F0-E8F0-4972-9E48-2D2BE7AE8F44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ED376FB-73A5-4E0E-A358-C8F1E20BBDB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ED376FB-73A5-4E0E-A358-C8F1E20BBDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ED376FB-73A5-4E0E-A358-C8F1E20BBDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ED376FB-73A5-4E0E-A358-C8F1E20BBDB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{015F42F2-37F6-4520-8D3D-4E9D0E51584D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{015F42F2-37F6-4520-8D3D-4E9D0E51584D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{015F42F2-37F6-4520-8D3D-4E9D0E51584D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{015F42F2-37F6-4520-8D3D-4E9D0E51584D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C67D894-4F18-44EC-80A6-12386AF395D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C67D894-4F18-44EC-80A6-12386AF395D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C67D894-4F18-44EC-80A6-12386AF395D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C67D894-4F18-44EC-80A6-12386AF395D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {87602AD5-823A-4B54-846E-7FF0020B655F}
+	EndGlobalSection
+EndGlobal
