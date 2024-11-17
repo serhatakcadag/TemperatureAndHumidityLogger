@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TemperatureAndHumidityLogger.Application\TemperatureAndHumidityLogger.Application.csproj" />
     <ProjectReference Include="..\TemperatureAndHumidityLogger.Core\TemperatureAndHumidityLogger.Core.csproj" />
   </ItemGroup>
 

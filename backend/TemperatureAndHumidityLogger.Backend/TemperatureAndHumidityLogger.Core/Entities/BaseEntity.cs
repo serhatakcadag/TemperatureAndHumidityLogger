@@ -10,6 +10,7 @@ namespace TemperatureAndHumidityLogger.Core.Entities
         public BaseEntity()
         {
             Id = Guid.NewGuid();
+            CreatedAt = DateTime.Now;
         }
     }
 }

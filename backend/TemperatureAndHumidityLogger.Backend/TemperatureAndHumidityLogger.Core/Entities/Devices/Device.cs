@@ -9,6 +9,7 @@ namespace TemperatureAndHumidityLogger.Core.Entities.Devices
 {
     public class Device : BaseEntity, ISoftDelete
     {
+        public Guid SerialNumber { get; set; }
         public string Caption { get; set; }
         public DateTime? DeletedAt { get; set; }
 

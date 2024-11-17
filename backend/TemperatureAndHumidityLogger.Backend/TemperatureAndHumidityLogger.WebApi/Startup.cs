@@ -21,7 +21,8 @@ namespace TemperatureAndHumidityLogger.WebApi
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
-            services.AddDbContext(_configuration);
+            services.AddInfrastructureServices(_configuration);
+            services.AddApplicationServices();
 
             services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<EfDbContext>()
