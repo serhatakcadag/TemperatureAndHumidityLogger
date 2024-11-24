@@ -33,6 +33,10 @@ namespace TemperatureAndHumidityLogger.Infrastructure.EFCore
                 .HasMany(d => d.Logs)
                 .WithOne(l => l.Device)
                 .HasForeignKey(l => l.DeviceId);
+
+            modelBuilder.Entity<Device>()
+                .HasIndex(d => d.SerialNumber)
+                .IsUnique();
         }
     }
 }

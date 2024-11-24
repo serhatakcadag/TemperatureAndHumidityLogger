@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TemperatureAndHumidityLogger.Infrastructure.EFCore;
 
@@ -11,9 +12,11 @@ using TemperatureAndHumidityLogger.Infrastructure.EFCore;
 namespace TemperatureAndHumidityLogger.Infrastructure.EFCore.Migrations
 {
     [DbContext(typeof(EfDbContext))]
-    partial class EfDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117180122_SerialNumberUniqueConstraint")]
+    partial class SerialNumberUniqueConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,11 +161,9 @@ namespace TemperatureAndHumidityLogger.Infrastructure.EFCore.Migrations
 
             modelBuilder.Entity("TemperatureAndHumidityLogger.Core.Entities.Logs.Log", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

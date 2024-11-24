@@ -5,7 +5,7 @@ using TemperatureAndHumidityLogger.Core.Responses;
 
 namespace TemperatureAndHumidityLogger.Application.Features.Devices.Commands.CreateDevice
 {
-    public class CreateDeviceCommand : IRequest<WrapResponse<Guid>>
+    public class CreateDeviceCommand : IRequest<WrapResponse<object>>
     {
         public Guid SerialNumber { get; set; }
     }

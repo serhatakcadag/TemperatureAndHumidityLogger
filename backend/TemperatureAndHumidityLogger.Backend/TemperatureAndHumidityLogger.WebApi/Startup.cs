@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using TemperatureAndHumidityLogger.Application.Extensions;
 using TemperatureAndHumidityLogger.Core.Entities.Users;
 using TemperatureAndHumidityLogger.Infrastructure.EFCore;
 using TemperatureAndHumidityLogger.Infrastructure.Extensions;
@@ -24,9 +25,19 @@ namespace TemperatureAndHumidityLogger.WebApi
             services.AddInfrastructureServices(_configuration);
             services.AddApplicationServices();
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            })
             .AddEntityFrameworkStores<EfDbContext>()
             .AddDefaultTokenProviders();
+
+            services.AddJwtSettings(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -38,10 +49,15 @@ namespace TemperatureAndHumidityLogger.WebApi
                 app.UseSwaggerUI();
             }
 
+            app.UseCors(options =>
+                    options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

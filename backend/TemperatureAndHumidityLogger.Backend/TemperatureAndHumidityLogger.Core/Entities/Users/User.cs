@@ -11,5 +11,10 @@ namespace TemperatureAndHumidityLogger.Core.Entities.Users
         public List<Device> Devices { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
+
+        public User() 
+        { 
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }

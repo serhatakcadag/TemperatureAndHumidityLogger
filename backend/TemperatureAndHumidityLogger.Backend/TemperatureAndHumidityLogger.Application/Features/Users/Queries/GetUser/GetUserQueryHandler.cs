@@ -5,7 +5,7 @@ using TemperatureAndHumidityLogger.Application.Interfaces;
 using TemperatureAndHumidityLogger.Core.Entities.Users;
 using TemperatureAndHumidityLogger.Core.Responses;
 
-namespace TemperatureAndHumidityLogger.Application.Features.Devices.Queries.GetUser
+namespace TemperatureAndHumidityLogger.Application.Features.Users.Queries.GetUser
 {
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, WrapResponse<User>>
     {
@@ -24,7 +24,7 @@ namespace TemperatureAndHumidityLogger.Application.Features.Devices.Queries.GetU
             }
 
             var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
-
+            
             return WrapResponse<User>.Success(user);
         }
     }
