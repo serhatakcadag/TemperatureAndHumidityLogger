@@ -15,7 +15,11 @@ namespace TemperatureAndHumidityLogger.Core.Entities.Logs
         [ForeignKey("Devices")]
         public Guid DeviceId { get; set; }
         public Device Device { get; set; }
-
         public DateTime CreatedAt { get; set; }
+
+        public Log()
+        {
+            CreatedAt = DateTime.Now;
+        }
     }
 }

@@ -20,6 +20,11 @@ namespace TemperatureAndHumidityLogger.Application.Features.Devices.Queries.GetA
 
         public async Task<WrapResponse<IEnumerable<Device>>> Handle(GetAllDevicesQuery request, CancellationToken cancellationToken)
         {
+            if (!await _unitOfWork.Users.IsAdmin())
+            {
+                return WrapResponse<IEnumerable<Device>>.Failure("Unauthorized");
+            }
+
             var devices = await _unitOfWork.Devices.GetAllAsync(request.TrackChanges);
 
             return WrapResponse<IEnumerable<Device>>.Success(devices);

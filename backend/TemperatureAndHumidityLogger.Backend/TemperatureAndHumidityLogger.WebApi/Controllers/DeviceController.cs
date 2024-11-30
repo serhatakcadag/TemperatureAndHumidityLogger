@@ -7,6 +7,7 @@ using TemperatureAndHumidityLogger.Application.Features.Devices.Commands.DeleteD
 using TemperatureAndHumidityLogger.Application.Features.Devices.Commands.UpdateDevice;
 using TemperatureAndHumidityLogger.Application.Features.Devices.Queries.GetAllDevices;
 using TemperatureAndHumidityLogger.Application.Features.Devices.Queries.GetDevice;
+using TemperatureAndHumidityLogger.Application.Features.Devices.Queries.GetUserDevices;
 
 namespace TemperatureAndHumidityLogger.WebApi.Controllers
 {
@@ -21,15 +22,37 @@ namespace TemperatureAndHumidityLogger.WebApi.Controllers
             _mediator = mediator;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<IActionResult> GetAllDevices()
         {
             var query = new GetAllDevicesQuery();
             var response = await _mediator.Send(query);
 
-            if (response.Result == null)
+            if (!response.Status)
             {
-                return NotFound(response);
+                if(response.Message is not null && response.Message.Contains("auth"))
+                {
+                    return Unauthorized(response);
+                }
+
+                return StatusCode(500, response);
+            }
+
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("mydevices")]
+        public async Task<IActionResult> GetMyDevices()
+        {
+            var query = new GetUserDevicesQuery();
+
+            var response = await _mediator.Send(query);
+
+            if (!response.Status)
+            {
+                return StatusCode(500, response);
             }
 
             return Ok(response);
@@ -51,8 +74,10 @@ namespace TemperatureAndHumidityLogger.WebApi.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<IActionResult> CreateDevice(CreateDeviceCommand command)
+        public async Task<IActionResult> CreateDevice()
         {
+            var command = new CreateDeviceCommand();
+
             var response = await _mediator.Send(command);
 
             if (!response.Status)

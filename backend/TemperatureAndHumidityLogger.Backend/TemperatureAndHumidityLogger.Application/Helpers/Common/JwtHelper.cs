@@ -16,14 +16,14 @@ namespace TemperatureAndHumidityLogger.Application.Helpers.Common
             _configuration = configuration;
         }
 
-        public string GenerateJwtToken(string userId, string email, string userName)
+        public string GenerateJwtToken(string userId, string email)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.Email, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Name, userName)
+                new Claim(ClaimTypes.NameIdentifier, userId)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));

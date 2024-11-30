@@ -11,6 +11,7 @@ namespace TemperatureAndHumidityLogger.Infrastructure.Seeders
         public static async Task SeedDatabaseAsync(this IServiceProvider serviceProvider)
         {
             await serviceProvider.SeedRolesAsync();
+            await serviceProvider.SeedAdminUserAsync();
         }
     }
 }

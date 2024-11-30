@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using TemperatureAndHumidityLogger.Application.Extensions;
+using TemperatureAndHumidityLogger.Application.Helpers.Common;
 using TemperatureAndHumidityLogger.Core.Entities.Users;
 using TemperatureAndHumidityLogger.Infrastructure.EFCore;
 using TemperatureAndHumidityLogger.Infrastructure.Extensions;
@@ -38,6 +39,8 @@ namespace TemperatureAndHumidityLogger.WebApi
             .AddDefaultTokenProviders();
 
             services.AddJwtSettings(_configuration);
+            services.AddSingleton<SecretKeyHelper>();
+            services.AddSingleton<SmsHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

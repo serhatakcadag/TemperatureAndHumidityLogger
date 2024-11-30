@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TemperatureAndHumidityLogger.Application.Helpers.Common;
@@ -34,7 +35,7 @@ namespace TemperatureAndHumidityLogger.Application.Features.Users.Commands.Login
                 return WrapResponse<string>.Failure("Invalid credentials.");
             }
 
-            return WrapResponse<string>.Success(_jwtHelper.GenerateJwtToken(user.Id.ToString(), user.Email, user.UserName));
+            return WrapResponse<string>.Success(_jwtHelper.GenerateJwtToken(user.Id.ToString(), user.Email));
         }
     }
 }

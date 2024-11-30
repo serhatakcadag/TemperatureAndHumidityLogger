@@ -17,5 +17,10 @@ namespace TemperatureAndHumidityLogger.Core.Entities.Devices
         public Guid? UserId { get; set; }
         public User User { get; set; }
         public List<Log> Logs { get; set; }
+
+        public float? MinTemperature { get; set; }
+        public float? MaxTemperature { get; set;}
+        public float? MinHumidity { get; set; }
+        public float? MaxHumidity { get;set; }
     }
 }

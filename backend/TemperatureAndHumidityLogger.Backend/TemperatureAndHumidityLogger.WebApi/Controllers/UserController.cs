@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TemperatureAndHumidityLogger.Application.Features.Users.Commands.Login;
 using TemperatureAndHumidityLogger.Application.Features.Users.Commands.Register;
+using TemperatureAndHumidityLogger.Application.Helpers.Common;
 
 namespace TemperatureAndHumidityLogger.WebApi.Controllers
 {
@@ -11,7 +12,6 @@ namespace TemperatureAndHumidityLogger.WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
-
         public UserController(IMediator mediator) 
         {
             _mediator = mediator;
