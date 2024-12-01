@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System;
-using TemperatureAndHumidityLogger.Core.Entities.Users;
 using Microsoft.Extensions.DependencyInjection;
+using TemperatureAndHumidityLogger.Infrastructure.EFCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace TemperatureAndHumidityLogger.Infrastructure.Seeders
 {
@@ -12,6 +12,12 @@ namespace TemperatureAndHumidityLogger.Infrastructure.Seeders
         {
             await serviceProvider.SeedRolesAsync();
             await serviceProvider.SeedAdminUserAsync();
+
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<EfDbContext>();
+                dbContext.Database.Migrate();
+            }
         }
     }
 }

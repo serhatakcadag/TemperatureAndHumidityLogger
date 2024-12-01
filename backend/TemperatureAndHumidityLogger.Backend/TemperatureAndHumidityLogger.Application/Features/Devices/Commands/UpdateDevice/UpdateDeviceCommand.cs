@@ -8,6 +8,10 @@ namespace TemperatureAndHumidityLogger.Application.Features.Devices.Commands.Upd
     {
         public Guid SerialNumber { get; set; }
         public string Caption { get; set; }
-        public Guid? UserId { get; set; }
+
+        public float? MinTemperature { get; set; }
+        public float? MaxTemperature { get; set;}
+        public float? MinHumidity { get; set; }
+        public float? MaxHumidity { get; set; }
     }
 }

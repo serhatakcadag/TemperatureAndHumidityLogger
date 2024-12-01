@@ -12,10 +12,12 @@ namespace TemperatureAndHumidityLogger.WebApi
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
         }
         public void ConfigureServices(IServiceCollection services)
         {
@@ -23,7 +25,7 @@ namespace TemperatureAndHumidityLogger.WebApi
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
-            services.AddInfrastructureServices(_configuration);
+            services.AddInfrastructureServices(_configuration, _env);
             services.AddApplicationServices();
 
             services.AddIdentity<User, Role>(options =>

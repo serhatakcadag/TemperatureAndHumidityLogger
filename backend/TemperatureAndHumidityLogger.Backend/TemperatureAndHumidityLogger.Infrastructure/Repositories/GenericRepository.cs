@@ -12,7 +12,7 @@ namespace TemperatureAndHumidityLogger.Infrastructure.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly EfDbContext _context;
-        private readonly DbSet<T> _dbSet;
+        protected readonly DbSet<T> _dbSet;
 
         public GenericRepository(EfDbContext context)
         {

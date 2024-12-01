@@ -10,7 +10,6 @@ namespace TemperatureAndHumidityLogger.Application.Helpers.Common
         {
             string url = "https://api.netgsm.com.tr/sms/send/get/";
 
-            // Gerekli parametreler
             var parameters = new MultipartFormDataContent
             {
                 { new StringContent("2626061831"), "usercode" },       // Abone numaranız
@@ -29,18 +28,15 @@ namespace TemperatureAndHumidityLogger.Application.Helpers.Common
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("SMS Gönderildi. Görev ID: " + responseBody);
                 }
                 else
                 {
-                    Console.WriteLine("Hata Oluştu: " + response.StatusCode);
                     string error = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("Hata Detayı: " + error);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Beklenmeyen bir hata oluştu: " + ex.Message);
+                Console.WriteLine(ex.Message);
             }
         }
     }

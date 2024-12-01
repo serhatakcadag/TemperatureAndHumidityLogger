@@ -22,5 +22,6 @@ namespace TemperatureAndHumidityLogger.Core.Entities.Devices
         public float? MaxTemperature { get; set;}
         public float? MinHumidity { get; set; }
         public float? MaxHumidity { get;set; }
+        public DateTime? LastMessageDate { get; set; }
     }
 }

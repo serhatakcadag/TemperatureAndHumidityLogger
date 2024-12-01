@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TemperatureAndHumidityLogger.Application.Features.Devices.Commands.AssignDevice;
 using TemperatureAndHumidityLogger.Application.Features.Devices.Commands.CreateDevice;
 using TemperatureAndHumidityLogger.Application.Features.Devices.Commands.DeleteDevice;
 using TemperatureAndHumidityLogger.Application.Features.Devices.Commands.UpdateDevice;
@@ -78,6 +79,20 @@ namespace TemperatureAndHumidityLogger.WebApi.Controllers
         {
             var command = new CreateDeviceCommand();
 
+            var response = await _mediator.Send(command);
+
+            if (!response.Status)
+            {
+                return StatusCode(500, response);
+            }
+
+            return Ok(response);
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("assign")]
+        public async Task<IActionResult> AssignDevice(AssignDeviceCommand command)
+        {
             var response = await _mediator.Send(command);
 
             if (!response.Status)

@@ -1,10 +1,13 @@
 ﻿using MediatR;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TemperatureAndHumidityLogger.Application.Helpers.Common;
 using TemperatureAndHumidityLogger.Application.Interfaces;
 using TemperatureAndHumidityLogger.Core.Entities.Common;
+using TemperatureAndHumidityLogger.Core.Entities.Devices;
 using TemperatureAndHumidityLogger.Core.Entities.Logs;
 using TemperatureAndHumidityLogger.Core.Responses;
 
@@ -12,13 +15,16 @@ namespace TemperatureAndHumidityLogger.Application.Features.Logs.Commands.Create
 {
     public class CreateLogCommandHandler : IRequestHandler<CreateLogCommand, WrapResponse<bool>>
     {
-        public IUnitOfWork _unitOfWork { get; set; }
-        public SecretKeyHelper _secretKeyHelper { get; set; }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly SecretKeyHelper _secretKeyHelper;
+        private readonly SmsHelper _smsHelper;
 
-        public CreateLogCommandHandler(IUnitOfWork unitOfWork, SecretKeyHelper secretKeyHelper)
+
+        public CreateLogCommandHandler(IUnitOfWork unitOfWork, SecretKeyHelper secretKeyHelper, SmsHelper smsHelper)
         {
             _unitOfWork = unitOfWork;
             _secretKeyHelper = secretKeyHelper;
+            _smsHelper = smsHelper;
         }
 
         public async Task<WrapResponse<bool>> Handle(CreateLogCommand request, CancellationToken cancellationToken)
@@ -32,11 +38,16 @@ namespace TemperatureAndHumidityLogger.Application.Features.Logs.Commands.Create
                     return WrapResponse<bool>.Failure("Invalid secret key.");
                 }
 
-                var device = await _unitOfWork.Devices.FindAsync(d => d.SerialNumber == decryptedSecret.SerialNumber && d.Id == decryptedSecret.DeviceId);
+                var device = (await _unitOfWork.Devices.FindAsync(d => d.SerialNumber == decryptedSecret.SerialNumber && d.Id == decryptedSecret.DeviceId)).FirstOrDefault();
 
                 if(device is null)
                 {
                     return WrapResponse<bool>.Failure("An error occured.");
+                }
+
+                if (device.UserId is null)
+                {
+                    return WrapResponse<bool>.Failure("Device is not owned.");
                 }
 
                 var log = new Log
@@ -47,6 +58,9 @@ namespace TemperatureAndHumidityLogger.Application.Features.Logs.Commands.Create
                 };
 
                 await _unitOfWork.Logs.AddAsync(log);
+
+                await SendSmsIfRequired(device, log);
+
                 await _unitOfWork.SaveChangesAsync();
 
                 return WrapResponse<bool>.Success(true);
@@ -99,5 +113,58 @@ namespace TemperatureAndHumidityLogger.Application.Features.Logs.Commands.Create
             Span<byte> buffer = new Span<byte>(new byte[value.Length]);
             return Convert.TryFromBase64String(value, buffer, out _);
         }
+
+        private async Task SendSmsIfRequired(Device device, Log log)
+        {
+            var message = CheckDeviceConditions(device, log.Temperature, log.Humidity);
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return;
+            }
+
+            if (device.LastMessageDate is not null)
+            {
+                TimeSpan difference = DateTime.Now - device.LastMessageDate.Value;
+
+                if (Math.Abs(difference.TotalMinutes) < 10) return;
+            }
+
+            var user = await _unitOfWork.Users.GetByIdAsync(device.UserId.Value);
+
+            await _smsHelper.SendSms(user.PhoneNumber, message);
+            device.LastMessageDate = DateTime.Now;
+        }
+
+        private string CheckDeviceConditions(Device device, float temperature, float humidity)
+        {
+            var issues = new List<string>();
+
+            if (device.MinTemperature != null && device.MaxTemperature != null)
+            {
+                if (temperature < device.MinTemperature || temperature > device.MaxTemperature)
+                {
+                    issues.Add($"temperature is now {temperature}°C");
+                }
+            }
+
+            if (device.MinHumidity != null && device.MaxHumidity != null)
+            {
+                if (humidity < device.MinHumidity || humidity > device.MaxHumidity)
+                {
+                    issues.Add($"humidity is now {humidity}%");
+                }
+            }
+
+            if (issues.Any())
+            {
+                string issueDetails = string.Join(", and ", issues);
+                string bothOrSingle = issues.Count < 2 ? "It is" : "Both are";
+                return $"Alert: The {issueDetails} for the device with serial number {device.SerialNumber}. {bothOrSingle} out of the desired range. Please take the necessary actions.";
+            }
+
+            return string.Empty;
+        }
+
     }
 }

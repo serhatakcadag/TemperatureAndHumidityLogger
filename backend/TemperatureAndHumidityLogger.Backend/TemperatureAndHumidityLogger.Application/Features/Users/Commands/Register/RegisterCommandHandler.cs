@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TemperatureAndHumidityLogger.Application.Helpers.Common;
@@ -21,10 +23,18 @@ namespace TemperatureAndHumidityLogger.Application.Features.Users.Commands.Regis
         }
         public async Task<WrapResponse<string>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
+            var validationResult = ValidatePhoneNumber(request.PhoneNumber);
+
+            if(!validationResult.Status)
+            {
+                return validationResult;
+            }
+
             User user = new()
             {
                 UserName = request.UserName,
                 Email = request.Email,
+                PhoneNumber = request.PhoneNumber
             };
 
             var createResult = await _unitOfWork.Users.RegisterAsync(user, request.Password);
@@ -39,6 +49,23 @@ namespace TemperatureAndHumidityLogger.Application.Features.Users.Commands.Regis
             await _unitOfWork.Users.AddToRoleAsync(user, "User");
 
             return WrapResponse<string>.Success("You have been successfully registered.");
+        }
+
+        private WrapResponse<string> ValidatePhoneNumber(string phoneNumber)
+        {
+            if(string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                return WrapResponse<string>.Failure("Phone number is required.");
+            }
+
+            string pattern = @"^5\d{9}$";
+
+            if (!Regex.IsMatch(phoneNumber, pattern))
+            {
+                return WrapResponse<string>.Failure("Phone number must be in (5XX XXX XX XX) format.");
+            }
+
+            return WrapResponse<string>.Success(phoneNumber);
         }
     }
 }

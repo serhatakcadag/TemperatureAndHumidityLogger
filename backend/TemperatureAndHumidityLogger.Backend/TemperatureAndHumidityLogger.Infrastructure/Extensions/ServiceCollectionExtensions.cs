@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using TemperatureAndHumidityLogger.Application.Features.Devices.Commands.CreateDevice;
 using TemperatureAndHumidityLogger.Application.Interfaces;
@@ -13,10 +15,18 @@ namespace TemperatureAndHumidityLogger.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
-            // TO-DO ADD AN IF STATEMENT TO DECIDE IF IT IS IN PRODUCTION OR NOT
-            var connectionString = configuration.GetConnectionString("DEV");
+            var connectionString = string.Empty;
+                
+            if(env.IsDevelopment())
+            {
+                connectionString = configuration.GetConnectionString("Development"); 
+            }
+            else
+            {
+                connectionString = configuration.GetConnectionString("Production");
+            }
 
             services.AddDbContext<EfDbContext>(options =>
                 options.UseSqlServer(connectionString));
