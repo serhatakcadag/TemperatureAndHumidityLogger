@@ -1,0 +1,102 @@
+  .registerContainer {
+    max-width: 400px;
+    margin: 0 auto;
+    background: var(--color-background, #ffffff); // Önerilen açık gri veya beyaz
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    color: var(--color-primary-text, #2c3e50); // Önerilen koyu gri
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .inputGroup {
+    margin-bottom: 2rem; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-size: 0.9rem;
+    color: var(--color-primary-text, #2c3e50); 
+    margin-bottom: 0.5rem;
+    text-align: left; 
+  }
+  
+  input {
+    padding: 0.8rem;
+    border: 1px solid var(--color-border, #ddd); 
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--color-input-bg, #f4f4f4); 
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--color-accent, #3498db); 
+    box-shadow: 0 0 4px rgba(52, 152, 219, 0.5); 
+  }
+
+  .error {
+    font-size: 0.8rem;
+    color: #e74c3c;
+    margin-top: 0.5rem;
+  }
+  
+  .response {
+    font-size: 0.9rem;
+    color: #27ae60; 
+    text-align: center;
+  }  
+
+  .redirect {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  
+  .link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  
+  .registerButton {
+    background-color: var(--color-primary, #3498db); 
+    color: var(--color-button-text, white);
+    border: none;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  
+    &:hover {
+      background-color: var(--color-primary-hover, #2980b9); 
+      transform: scale(1.02); 
+    }
+  
+    &:active {
+      background-color: var(--color-primary-active, #1f6099); // Daha koyu aktif renk
+      transform: scale(1); // Eski haline dön
+    }
+
+    &:disabled {
+        background-color: #95a5a6; // Disabled durumunda gri
+        color: #ffffff; // Yazı rengini açık gri yap
+        cursor: not-allowed; // Devre dışı imleci
+        transform: none; // Transform efektini kaldır
+        opacity: 0.85; // Hafif saydamlık efekti
+        box-shadow: none; // Gölge efektini kaldır
+      }
+  }
+  

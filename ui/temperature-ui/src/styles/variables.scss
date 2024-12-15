@@ -1,0 +1,9 @@
+$primary-color: #3498db;
+$danger-color: #e74c3c;   
+$text-color-white: #ffffff;
+
+:root {
+  --primary-color: #{$primary-color};
+  --danger-color: #{$danger-color};
+  --text-color-white: #{$text-color-white};
+}

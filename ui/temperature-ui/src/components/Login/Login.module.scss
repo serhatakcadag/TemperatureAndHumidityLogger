@@ -1,0 +1,87 @@
+.loginContainer {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .inputGroup {
+    margin-bottom: 2rem;
+  }
+  
+  label {
+    font-size: 0.9rem;
+    color: var(--color-primary-text, #2c3e50); 
+    margin-bottom: 0.5rem;
+    text-align: left !important; 
+    display: block;
+    width: 100%;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #f4f4f4;
+  
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 4px rgba(52, 152, 219, 0.5);
+    }
+  }
+  
+  .error {
+    font-size: 0.8rem;
+    color: #e74c3c; // Hata mesajı kırmızı
+    margin-top: 0.5rem;
+  }
+  
+  .response {
+    font-size: 0.9rem;
+    color: #27ae60; // Başarılı mesaj yeşil
+    text-align: center;
+  }
+
+  .redirect {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  
+  .link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .loginButton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+  
+    &:hover {
+      background-color: #2980b9;
+    }
+  }
+  

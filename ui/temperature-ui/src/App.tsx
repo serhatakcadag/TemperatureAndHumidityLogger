@@ -1,24 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import "./styles/main.scss";
+import Register from "./components/Register/Register";
+import Login from "./components/Login/Login";
+import { useEffect } from "react";
+import { setAuthorizationHeader } from "./api/serviceHelper";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from "react-router-dom";
+import { PublicRoute, PrivateRoute } from "./routes";
+import Home from "./components/Home/Home";
 
 function App() {
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    setAuthorizationHeader(token);
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<PublicRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
