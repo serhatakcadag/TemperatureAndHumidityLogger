@@ -2,8 +2,6 @@ import "./App.css";
 import "./styles/main.scss";
 import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
-import { useEffect } from "react";
-import { setAuthorizationHeader } from "./api/serviceHelper";
 import {
   BrowserRouter,
   Route,
@@ -13,11 +11,6 @@ import { PublicRoute, PrivateRoute } from "./routes";
 import Home from "./components/Home/Home";
 
 function App() {
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    setAuthorizationHeader(token);
-  }, []);
-
   return (
     <div className="App">
       <BrowserRouter>

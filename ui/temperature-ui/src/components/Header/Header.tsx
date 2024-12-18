@@ -1,5 +1,4 @@
 import React from "react";
-import { setAuthorizationHeader } from "src/api/serviceHelper";
 import { useNavigate } from "react-router-dom";
 import styles from './Header.module.scss';
 import {FiLogOut} from 'react-icons/fi';
@@ -9,8 +8,6 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    setAuthorizationHeader(null);
-
     navigate("/login");
   };
 

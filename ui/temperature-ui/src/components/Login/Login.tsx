@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Styles from './Login.module.scss';
 import userService from '../../api/userService';
-import { setAuthorizationHeader } from 'src/api/serviceHelper';
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
@@ -55,8 +54,6 @@ const Login: React.FC = () => {
       setResponseMessage(message);
 
       localStorage.setItem('authToken', response.result);
-
-      setAuthorizationHeader(response.result);
 
       navigate('/');
     } catch (error) {

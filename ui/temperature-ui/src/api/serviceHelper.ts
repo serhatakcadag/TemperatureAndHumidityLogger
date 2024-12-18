@@ -9,13 +9,13 @@ const apiClient = axios.create({
   },
 });
 
-export const setAuthorizationHeader = (token: string | null) => {
-    if (token) {
-        apiClient.defaults.headers.Authorization = `Bearer ${token}`;
-    } else {
-        delete apiClient.defaults.headers.Authorization;
-    }
-};
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 apiClient.interceptors.response.use(
   (response) => {return response},
@@ -23,13 +23,10 @@ apiClient.interceptors.response.use(
     if(error.response)
     {
       const statusCode = error.response.status;
-      const invalidToken = error.response.headers["WWW-Authenticate"]?.includes('invalid-token');
 
-      if(statusCode === 401 && invalidToken)
+      if(statusCode === 401)
       {
         localStorage.removeItem('authToken');
-        setAuthorizationHeader(null);
-
         window.location.href = '/login';
       }
     }

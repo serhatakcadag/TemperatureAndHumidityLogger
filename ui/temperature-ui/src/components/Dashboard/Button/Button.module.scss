@@ -1,6 +1,8 @@
+@import '../../../styles/variables.scss';
+
 .button {
-  background-color: #3498db;
-  color: #ffffff;
+  background-color: $primary-color;
+  color: $text-color-white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;

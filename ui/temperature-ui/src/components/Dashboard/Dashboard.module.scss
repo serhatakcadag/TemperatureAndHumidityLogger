@@ -1,0 +1,49 @@
+.dashboard {
+  padding: 20px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+
+  .topBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    display: flex;
+    gap: 20px;
+
+    .chartContainer {
+      flex: 1; // Grafik, cihaz tercih paneline göre esneklik gösterir
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .singleChart {
+      flex: 1; // Grafiklerin eşit genişlikte olmasını sağlar
+      max-width: 600px; // İsteğe bağlı: Grafiklerin maksimum genişliğini sınırlayın
+    }
+  }
+}
+
+.inputGroup {
+  display: block;
+}
+
+input {
+  width: 95%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #f4f4f4;
+
+  &:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 4px rgba(52, 152, 219, 0.5);
+  }
+}
