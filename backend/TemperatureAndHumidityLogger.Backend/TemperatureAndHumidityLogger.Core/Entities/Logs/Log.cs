@@ -19,7 +19,7 @@ namespace TemperatureAndHumidityLogger.Core.Entities.Logs
 
         public Log()
         {
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.Now.AddHours(3);
         }
     }
 }

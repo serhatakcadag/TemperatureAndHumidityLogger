@@ -6,17 +6,34 @@ import DevicePreferences from "./DevicePreferences/DevicePreferences";
 import Chart from "./Chart/Chart";
 import styles from "./Dashboard.module.scss";
 import { Device } from "src/entities/device";
-import { deviceService } from "src/api";
+import { deviceService, logService } from "src/api";
 import axios from "axios";
+import { LogResponse } from "src/entities/log";
+import dayjs from "dayjs";
 
 const Dashboard: React.FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);
+  const [logs, setLogs] = useState<LogResponse[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<
     Device | null | undefined
   >(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [serialNumber, setSerialNumber] = useState<string>("");
   const [responseMessage, setResponseMessage] = useState<string>("");
+  const [temperatureChartData, setTemperatureChartData] = useState<{
+    xLabels: any[];
+    yValues: (number | null)[];
+  }>({
+    xLabels: [],
+    yValues: [],
+  });
+  const [humidityChartData, setHumidityChartData] = useState<{
+    xLabels: any[];
+    yValues: (number | null)[];
+  }>({
+    xLabels: [],
+    yValues: [],
+  });
 
   const fetchDevice = async () => {
     try {
@@ -27,9 +44,25 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const fetchLogs = async () => {
+    try {
+      if (!selectedDevice?.id) {
+        return;
+      }
+      const response = await logService.logsByDeviceId(selectedDevice?.id);
+      setLogs(response.result);
+    } catch (error) {
+      console.error("Error fetching device:", error);
+    }
+  };
+
   useEffect(() => {
     fetchDevice();
   }, []);
+
+  useEffect(() => {
+    fetchLogs();
+  }, [selectedDevice]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -63,6 +96,64 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const intervalInMinutes = 15; // 1 saatlik aralık
+    const temperatureProcessedData = processChartData(
+      logs,
+      intervalInMinutes,
+      "temperature"
+    );
+    const humidityProcessedData = processChartData(
+      logs,
+      intervalInMinutes,
+      "humidity"
+    );
+    setTemperatureChartData(temperatureProcessedData);
+    setHumidityChartData(humidityProcessedData);
+  }, [logs]);
+
+  function processChartData(
+    logs: Array<LogResponse>,
+    intervalInMinutes: number,
+    dataKey: string
+  ) {
+    const now = dayjs();
+    const startTime = now.subtract(24, "hour");
+
+    const timeIntervals: Array<any> = [];
+    let currentTime = startTime;
+    while (currentTime.isBefore(now)) {
+      timeIntervals.push(currentTime);
+      currentTime = currentTime.add(intervalInMinutes, "minute");
+    }
+
+    const data = timeIntervals.map((start, index) => {
+      const end = timeIntervals[index + 1] || now;
+
+      const logsInInterval = logs.filter((log) => {
+        const logTime = dayjs(log.createdAt);
+        return logTime.isAfter(start) && logTime.isBefore(end);
+      });
+
+      // Ortalamasını al
+      const avgValue =
+        //@ts-ignore
+        logsInInterval.reduce((sum, log) => sum + log[dataKey], 0) /
+        (logsInInterval.length || 1);
+
+      return {
+        label: start.format("HH:mm"), // xLabel
+        value: logsInInterval.length > 0 ? avgValue : null, // yValue
+      };
+    });
+
+    // Etiketler ve veriler
+    const xLabels = data.map((item) => item.label);
+    const yValues = data.map((item) => item.value);
+
+    return { xLabels, yValues };
+  }
+
   return (
     <div className={styles.dashboard}>
       <div className={styles.topBar}>
@@ -85,16 +176,16 @@ const Dashboard: React.FC = () => {
               <div className={styles.singleChart}>
                 <Chart
                   chartLabel="Temperature"
-                  datas={[1, 2, 3]}
-                  xLabels={["11", "12", "13"]}
+                  datas={temperatureChartData.yValues}
+                  xLabels={temperatureChartData.xLabels}
                 />
               </div>
               <div className={styles.singleChart}>
                 <Chart
                   chartLabel="Humidity"
                   color="blue"
-                  datas={[1, 2, 3]}
-                  xLabels={["11", "12", "13"]}
+                  datas={humidityChartData.yValues}
+                  xLabels={humidityChartData.xLabels}
                 />
               </div>
             </div>
@@ -116,7 +207,9 @@ const Dashboard: React.FC = () => {
               onChange={(e) => setSerialNumber(e.target.value)}
             />
           </div>
-          {responseMessage && <p className={styles.response}>{responseMessage}</p>}
+          {responseMessage && (
+            <p className={styles.response}>{responseMessage}</p>
+          )}
           <Button onClick={handleAssignDevice} label="Add" />
         </form>
       </Modal>
